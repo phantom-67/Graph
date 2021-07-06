@@ -1,29 +1,67 @@
 import java.util.*;
-import java.io.*;
 import java.lang.*;
-
-class DriverClass
+import java.io.*;
+class GFG
 {
-    public static void main (String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int t = sc.nextInt();
-        
-        while(t-- > 0)
+    public static void main(String[] args) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while(T-->0)
         {
-            ArrayList<ArrayList<Integer>> list = new ArrayList<>();
-            int V = sc.nextInt();
-            int E = sc.nextInt();
-            for(int i = 0; i < V+1; i++)
-                list.add(i, new ArrayList<Integer>());
-            for(int i = 0; i < E; i++)
-            {
-                int u = sc.nextInt();
-                int v = sc.nextInt();
-                list.get(u).add(v);
+            String[] s = br.readLine().trim().split(" ");
+            int V = Integer.parseInt(s[0]);
+            int E = Integer.parseInt(s[1]);
+            ArrayList<ArrayList<Integer>>adj = new ArrayList<>();
+            for(int i = 0; i < V; i++)
+                adj.add(i, new ArrayList<Integer>());
+            for(int i = 0; i < E; i++){
+                String[] S = br.readLine().trim().split(" ");
+                int u = Integer.parseInt(S[0]);
+                int v = Integer.parseInt(S[1]);
+                adj.get(u).add(v);
+                // adj.get(v).add(u);
             }
-            if(new Solution().isCyclic(V, list) == true)
-                System.out.println("1");
-            else System.out.println("0");
+            Solution obj = new Solution();
+            ArrayList<Integer>ans = obj.bfsOfGraph(V, adj);
+            for (int i =0 ;i < ans.size (); i++) 
+                System.out.print (ans.get (i) + " ");
+            System.out.println();
         }
+    }
+}
+// } Driver Code Ends
+
+class Solution
+{
+    //Function to return Breadth First Traversal of given graph.
+    public ArrayList<Integer> bfsOfGraph(int V,ArrayList<ArrayList<Integer>> adj)
+    {
+        ArrayList<Integer> res = new ArrayList<>();
+        boolean visited[] = new boolean[V+1];
+        
+        for(int i=0;i<V;i++){
+            if(i>0) break;
+            if(!visited[i]){
+                Queue<Integer> queue = new LinkedList<>();
+                queue.add(i);
+                visited[i]=true;
+                
+                while(!queue.isEmpty()){
+                    int temp = queue.poll();
+                    res.add(temp);
+                    
+                    for(int j=0;j<adj.get(temp).size();j++){
+                        int newNode=adj.get(temp).get(j);
+                        if(!visited[newNode]){
+                            queue.add(newNode);
+                            visited[newNode]=true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return res;
     }
 }
