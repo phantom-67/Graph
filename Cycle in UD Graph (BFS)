@@ -34,7 +34,7 @@ class GFG
 
 class Node{
     int first;
-    int secondimport;
+    int second;
     Node(int first, int second){
         this.first=first;
         this.second=second;
